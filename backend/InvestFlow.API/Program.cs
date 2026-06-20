@@ -1,6 +1,8 @@
 using InvestFlow.API.Extensions;
 using InvestFlow.API.Middleware;
 using InvestFlow.Infrastructure.BackgroundJobs;
+using InvestFlow.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,14 @@ builder.Services.AddHostedService<
 var app = builder.Build();
 
 app.UseCors("Frontend");
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext =
+        scope.ServiceProvider
+            .GetRequiredService<ApplicationDbContext>();
+
+    await dbContext.Database.MigrateAsync();
+}
 
 if (app.Environment.IsDevelopment())
 {
