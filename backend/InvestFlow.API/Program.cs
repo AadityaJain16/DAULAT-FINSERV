@@ -16,7 +16,8 @@ builder.Services.AddCors(options =>
             policy
                 .WithOrigins(
                     "http://localhost:5173",
-                    "http://localhost:4173")
+                    "http://localhost:4173",
+                    "https://daulatfinserv.netlify.app")
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -70,6 +71,9 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", () => "InvestFlow API Running");
-
+app.MapGet("/health", () => Results.Ok(new
+{
+    Status = "Healthy",
+    Timestamp = DateTime.UtcNow
+}));
 app.Run();
