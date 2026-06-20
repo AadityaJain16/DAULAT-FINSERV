@@ -47,6 +47,7 @@ using (var scope = app.Services.CreateScope())
             .GetRequiredService<ApplicationDbContext>();
 
     await dbContext.Database.MigrateAsync();
+
     await AdminSeeder.SeedAdminAsync(dbContext);
 }
 
