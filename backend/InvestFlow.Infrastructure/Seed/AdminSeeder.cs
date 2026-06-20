@@ -3,13 +3,15 @@ using InvestFlow.Domain.Entities;
 using InvestFlow.Domain.Enums;
 using InvestFlow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace InvestFlow.Infrastructure.Seed;
 
 public static class AdminSeeder
 {
     public static async Task SeedAdminAsync(
-        ApplicationDbContext context)
+        ApplicationDbContext context,
+        IConfiguration configuration)
     {
         var adminExists = await context.Users
             .AnyAsync(x => x.Role == UserRole.ADMIN);
@@ -17,11 +19,25 @@ public static class AdminSeeder
         if (adminExists)
             return;
 
+        var mobile =
+            configuration["ADMIN_MOBILE"];
+
+        var password =
+            configuration["ADMIN_PASSWORD"];
+
+        if (string.IsNullOrWhiteSpace(mobile) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            throw new InvalidOperationException(
+                "Admin credentials are not configured.");
+        }
+
         var admin = new User
         {
             FullName = "System Administrator",
-            MobileNumber = "8058960819",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Nag1n@bhuaa"),
+            MobileNumber = mobile,
+            PasswordHash =
+                BCrypt.Net.BCrypt.HashPassword(password),
             Role = UserRole.ADMIN,
             IsActive = true,
             CreatedAt = DateTime.UtcNow,
@@ -31,5 +47,10 @@ public static class AdminSeeder
         context.Users.Add(admin);
 
         await context.SaveChangesAsync();
+    }
+
+    public static async Task SeedAdminAsync(ApplicationDbContext dbContext)
+    {
+        throw new NotImplementedException();
     }
 }
