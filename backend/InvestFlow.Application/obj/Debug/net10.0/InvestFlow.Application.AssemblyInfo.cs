@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("InvestFlow.Application")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+59dbb66c51131e83fb81b6126036ded5894bc145")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3a486fa3f4735c750967cfda289b78d126a4f274")]
 [assembly: System.Reflection.AssemblyProductAttribute("InvestFlow.Application")]
 [assembly: System.Reflection.AssemblyTitleAttribute("InvestFlow.Application")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

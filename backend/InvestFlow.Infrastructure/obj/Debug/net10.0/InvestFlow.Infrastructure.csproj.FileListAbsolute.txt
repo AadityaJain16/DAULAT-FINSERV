@@ -17,3 +17,4 @@
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Infrastructure/obj/Debug/net10.0/InvestFlow.Infrastructure.pdb
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Infrastructure/obj/Debug/net10.0/InvestFlow.Infrastructure.genruntimeconfig.cache
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Infrastructure/obj/Debug/net10.0/ref/InvestFlow.Infrastructure.dll
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Infrastructure/obj/Debug/net10.0/InvestFlow.Infrastructure.sourcelink.json

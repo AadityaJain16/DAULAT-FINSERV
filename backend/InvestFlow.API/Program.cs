@@ -3,6 +3,7 @@ using InvestFlow.Infrastructure.Data;
 using InvestFlow.Infrastructure.Seed;
 using InvestFlow.API.Middleware;
 using InvestFlow.Infrastructure.BackgroundJobs;
+using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
@@ -39,6 +40,8 @@ using (var scope = app.Services.CreateScope())
     var dbContext =
         scope.ServiceProvider
             .GetRequiredService<ApplicationDbContext>();
+
+    await dbContext.Database.MigrateAsync();
 
     await AdminSeeder.SeedAdminAsync(dbContext);
 }

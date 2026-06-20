@@ -9,3 +9,4 @@
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/refint/InvestFlow.Domain.dll
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.pdb
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/ref/InvestFlow.Domain.dll
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.sourcelink.json
