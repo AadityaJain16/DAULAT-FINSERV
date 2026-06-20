@@ -3,19 +3,23 @@ using InvestFlow.Application.Interfaces.Investment;
 using InvestFlow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using InvestFlow.Application.Interfaces.ActivityLog;
+using InvestFlow.Application.Interfaces.ProfitEngine;
 namespace InvestFlow.Infrastructure.Services.Investment;
 
 public class InvestmentService : IInvestmentService
 {
+    private readonly IMonthlyProfitService _monthlyProfitService;
     private readonly IActivityLogService _activityLogService;
     private readonly ApplicationDbContext _context;
 
-    public InvestmentService(
+public InvestmentService(
     ApplicationDbContext context,
-    IActivityLogService activityLogService)
+    IActivityLogService activityLogService,
+    IMonthlyProfitService monthlyProfitService)
 {
     _context = context;
     _activityLogService = activityLogService;
+    _monthlyProfitService = monthlyProfitService;
 }
 
     public async Task<InvestmentResponseDto>
@@ -81,6 +85,65 @@ investor.TotalInvestment +=
         
 
         await _context.SaveChangesAsync();
+        var currentMonth =
+    DateTime.UtcNow.Month;
+
+var currentYear =
+    DateTime.UtcNow.Year;
+
+if (
+    request.InvestmentDate.Year < currentYear ||
+    (
+        request.InvestmentDate.Year == currentYear &&
+        request.InvestmentDate.Month < currentMonth
+    )
+)
+{
+    await _monthlyProfitService
+        .RecalculateInvestorProfitAsync(
+            request.InvestorId);
+}
+        var now = DateTime.UtcNow;
+
+if (
+    request.InvestmentDate.Year < now.Year ||
+    (
+        request.InvestmentDate.Year == now.Year &&
+        request.InvestmentDate.Month < now.Month
+    )
+)
+{
+    await _monthlyProfitService
+        .RecalculateInvestorProfitAsync(
+            request.InvestorId,
+            request.InvestmentDate.Month,
+            request.InvestmentDate.Year);
+}
+        var investmentMonth =
+    request.InvestmentDate.Month;
+
+var investmentYear =
+    request.InvestmentDate.Year;
+
+var existingRecord =
+    await _context.ProfitRecords
+        .FirstOrDefaultAsync(x =>
+            x.InvestorId == request.InvestorId &&
+            x.Month == investmentMonth &&
+            x.Year == investmentYear);
+
+if (existingRecord != null)
+{
+    _context.ProfitRecords.Remove(
+        existingRecord);
+
+    await _context.SaveChangesAsync();
+
+    await _monthlyProfitService
+        .CalculateMonthlyProfitAsync(
+            investmentMonth,
+            investmentYear);
+}
         await _activityLogService.LogAsync(
     "Investment",
     $"{investor.User.FullName} invested ₹{request.Amount:N2}.");

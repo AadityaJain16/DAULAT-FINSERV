@@ -44,6 +44,25 @@ public class NotificationsController
                 Data = result
             });
     }
+    [HttpGet]
+public async Task<IActionResult>
+    GetAll()
+{
+    var notifications =
+        await _notificationService
+            .GetAllAsync();
+
+    return Ok(
+        new ApiResponse<
+            IEnumerable<
+                NotificationResponseDto>>
+        {
+            Success = true,
+            Message =
+                "Notifications retrieved successfully.",
+            Data = notifications
+        });
+}
 
     [HttpGet("{investorId}")]
     public async Task<IActionResult>

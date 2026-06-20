@@ -7,6 +7,11 @@ export const notificationService = {
       data
     ),
 
+  getAll: () =>
+    api.get(
+      "/notifications"
+    ),
+
   getByInvestorId: (id) =>
     api.get(
       `/notifications/${id}`

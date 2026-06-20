@@ -8,7 +8,5 @@ export const investorDetailsService = {
     api.get(`/investments/${id}`),
 
   getProfits: (id) =>
-    api.get(
-      `/profitdistributions/${id}`
-    ),
+    api.get(`/ProfitRecords/investor/${id}`),
 };

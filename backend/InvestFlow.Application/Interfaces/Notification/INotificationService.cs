@@ -9,5 +9,6 @@ public interface INotificationService
 
     Task<IEnumerable<NotificationResponseDto>>
         GetByInvestorIdAsync(int investorId);
-        Task MarkAsReadAsync(int notificationId);
+    Task<IEnumerable<NotificationResponseDto>> GetAllAsync();
+    Task MarkAsReadAsync(int notificationId);
 }

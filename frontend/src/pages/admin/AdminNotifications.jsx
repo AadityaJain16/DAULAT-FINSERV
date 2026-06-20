@@ -21,9 +21,7 @@ const Notifications = () => {
     useState([]);
 const [investors, setInvestors] =
   useState([]);
-  const [investorId,
-    setInvestorId] =
-    useState(1);
+ 
 
   const [showModal,
     setShowModal] =
@@ -36,18 +34,16 @@ const [investors, setInvestors] =
  useEffect(() => {
   fetchNotifications();
   fetchInvestors();
-}, [investorId]);
+}, []);
 
   const fetchNotifications =
     async () => {
       try {
         setLoading(true);
 
-        const response =
-          await notificationService
-            .getByInvestorId(
-              investorId
-            );
+       const response =
+  await notificationService
+    .getAll();
 
         setNotifications(
           response.data.data
@@ -80,12 +76,7 @@ const [investors, setInvestors] =
 
         setShowModal(false);
 
-        if (
-          data.investorId ===
-          investorId
-        ) {
-          fetchNotifications();
-        }
+        fetchNotifications();
       } catch (error) {
         console.error(error);
       }
@@ -125,26 +116,7 @@ const [investors, setInvestors] =
         </GradientButton>
       </div>
 
-      <input
-        type="number"
-        value={investorId}
-        onChange={(e) =>
-          setInvestorId(
-            Number(
-              e.target.value
-            )
-          )
-        }
-        placeholder="Investor ID"
-        className="
-          bg-white/5
-          border
-          border-white/10
-          rounded-xl
-          p-3
-          text-white
-        "
-      />
+     
 
       <GlassCard className="p-6">
         {loading ? (

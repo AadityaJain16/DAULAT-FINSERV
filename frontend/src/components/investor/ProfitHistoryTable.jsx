@@ -11,15 +11,13 @@ const ProfitHistoryTable = ({
 
       {profits.length === 0 ? (
         <p className="text-slate-400">
-          No profit distributions found.
+          No profit records found.
         </p>
       ) : (
         <div className="space-y-3">
-          {profits.map((profit) => (
+          {profits.map((profit, index) => (
             <div
-              key={
-                profit.profitDistributionId
-              }
+              key={`${profit.year}-${profit.month}-${index}`}
               className="
                 border-b
                 border-white/10
@@ -36,7 +34,7 @@ const ProfitHistoryTable = ({
                 <div>
                   <p>
                     {new Date(
-                      profit.distributionDate
+                      profit.calculationDate
                     ).toLocaleDateString()}
                   </p>
 
@@ -46,10 +44,8 @@ const ProfitHistoryTable = ({
                       text-slate-400
                     "
                   >
-                    Distribution #
-                    {
-                      profit.profitDistributionId
-                    }
+                    Month: {profit.month}/
+                    {profit.year}
                   </p>
                 </div>
 
@@ -61,32 +57,47 @@ const ProfitHistoryTable = ({
                 >
                   ₹
                   {Number(
-                    profit.profitAmount ?? 0
+                    profit.monthlyProfit ?? 0
                   ).toLocaleString()}
                 </span>
               </div>
 
               <div
                 className="
-                  flex
-                  justify-between
-                  mt-2
+                  grid
+                  grid-cols-2
+                  gap-2
+                  mt-3
                   text-sm
                   text-slate-400
                 "
               >
                 <span>
-                  Investment: ₹
+                  Opening: ₹
                   {Number(
-                    profit.investmentAmount ?? 0
+                    profit.openingPrincipal ?? 0
                   ).toLocaleString()}
                 </span>
 
                 <span>
+                  Profit Base: ₹
                   {Number(
-                    profit.profitPercentage ?? 0
-                  )}
-                  %
+                    profit.profitBase ?? 0
+                  ).toLocaleString()}
+                </span>
+
+                <span>
+                  Closing: ₹
+                  {Number(
+                    profit.closingPrincipal ?? 0
+                  ).toLocaleString()}
+                </span>
+
+                <span>
+                  Profit: ₹
+                  {Number(
+                    profit.monthlyProfit ?? 0
+                  ).toLocaleString()}
                 </span>
               </div>
             </div>

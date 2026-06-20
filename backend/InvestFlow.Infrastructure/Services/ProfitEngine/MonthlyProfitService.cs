@@ -153,4 +153,76 @@ decimal openingPrincipal =
 
         await _context.SaveChangesAsync();
     }
+    public async Task RecalculateInvestorProfitAsync(
+    int investorId)
+{
+    var investor =
+        await _context.Investors
+            .Include(x => x.Investments)
+            .Include(x => x.Withdrawals)
+            .Include(x => x.ProfitRecords)
+            .FirstOrDefaultAsync(x =>
+                x.Id == investorId);
+
+    if (investor == null)
+        return;
+
+    var existingRecords =
+        await _context.ProfitRecords
+            .Where(x =>
+                x.InvestorId == investorId)
+            .ToListAsync();
+
+    _context.ProfitRecords.RemoveRange(
+        existingRecords);
+
+    investor.AccumulatedInterest = 0;
+    investor.TotalProfitEarned = 0;
+    investor.PendingInvestmentCarryForward = 0;
+
+    await _context.SaveChangesAsync();
+
+    var firstInvestment =
+        investor.Investments
+            .OrderBy(x => x.InvestmentDate)
+            .FirstOrDefault();
+
+    if (firstInvestment == null)
+        return;
+
+    var startDate =
+        new DateTime(
+            firstInvestment.InvestmentDate.Year,
+            firstInvestment.InvestmentDate.Month,
+            1);
+
+    var currentDate =
+        DateTime.UtcNow;
+
+    var endDate =
+        new DateTime(
+            currentDate.Year,
+            currentDate.Month,
+            1);
+
+    while (startDate <= endDate)
+    {
+        await CalculateMonthlyProfitAsync(
+            startDate.Month,
+            startDate.Year);
+
+        startDate =
+            startDate.AddMonths(1);
+    }
+}
+
+    Task IMonthlyProfitService.CalculateMonthlyProfitAsync(int month, int year)
+    {
+        throw new NotImplementedException();
+    }
+
+    Task IMonthlyProfitService.RecalculateInvestorProfitAsync(int investorId, int fromMonth, int fromYear)
+    {
+        throw new NotImplementedException();
+    }
 }

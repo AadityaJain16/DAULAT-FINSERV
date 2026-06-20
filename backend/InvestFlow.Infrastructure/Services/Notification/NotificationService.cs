@@ -69,6 +69,22 @@ public class NotificationService : INotificationService
             })
             .ToListAsync();
     }
+    public async Task<IEnumerable<NotificationResponseDto>>
+    GetAllAsync()
+{
+    return await _context.Notifications
+        .OrderByDescending(x => x.CreatedAt)
+        .Select(x => new NotificationResponseDto
+        {
+            NotificationId = x.Id,
+            InvestorId = x.InvestorId,
+            Title = x.Title,
+            Message = x.Message,
+            IsRead = x.IsRead,
+            CreatedAt = x.CreatedAt
+        })
+        .ToListAsync();
+}
     public async Task MarkAsReadAsync(
     int notificationId)
 {

@@ -1,8 +1,4 @@
-import {
-  useEffect,
-  useState,
-} from "react";
-
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import StatCard from "../../components/common/StatCard";
@@ -14,47 +10,28 @@ import ProfitHistoryTable from "../../components/investor/ProfitHistoryTable";
 import WithdrawalHistoryTable from "../../components/investor/WithdrawalHistoryTable";
 
 import AddInvestmentModal from "../../components/investor/AddInvestmentModal";
-import DistributeProfitModal from "../../components/investor/DistributeProfitModal";
 import AddWithdrawalModal from "../../components/investor/AddWithdrawalModal";
 
-import {
-  investorDetailsService,
-} from "../../services/investorDetailsService";
-
-import {
-  withdrawalService,
-} from "../../services/withdrawalService";
+import { investorDetailsService } from "../../services/investorDetailsService";
+import { withdrawalService } from "../../services/withdrawalService";
 
 const InvestorDetails = () => {
   const { id } = useParams();
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [investor, setInvestor] =
-    useState(null);
+  const [investor, setInvestor] = useState(null);
 
-  const [investments, setInvestments] =
-    useState([]);
+  const [investments, setInvestments] = useState([]);
 
-  const [profits, setProfits] =
-    useState([]);
+  const [profits, setProfits] = useState([]);
 
-  const [withdrawals, setWithdrawals] =
-    useState([]);
+  const [withdrawals, setWithdrawals] = useState([]);
 
-  const [showModal, setShowModal] =
+  const [showModal, setShowModal] = useState(false);
+
+  const [showWithdrawalModal, setShowWithdrawalModal] =
     useState(false);
-
-  const [
-    showProfitModal,
-    setShowProfitModal,
-  ] = useState(false);
-
-  const [
-    showWithdrawalModal,
-    setShowWithdrawalModal,
-  ] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -65,38 +42,37 @@ const InvestorDetails = () => {
       setLoading(true);
 
       const investorResponse =
-        await investorDetailsService
-          .getInvestor(id);
+        await investorDetailsService.getInvestor(id);
 
       const investmentsResponse =
-        await investorDetailsService
-          .getInvestments(id);
+        await investorDetailsService.getInvestments(id);
 
       const profitsResponse =
-        await investorDetailsService
-          .getProfits(id);
+        await investorDetailsService.getProfits(id);
 
       const withdrawalsResponse =
-        await withdrawalService
-          .getByInvestorId(id);
+        await withdrawalService.getByInvestorId(id);
 
       setInvestor(
         investorResponse.data.data
       );
 
       setInvestments(
-        investmentsResponse.data.data
+        investmentsResponse.data.data ?? []
       );
 
       setProfits(
-        profitsResponse.data.data
+        profitsResponse.data.data ?? []
       );
 
       setWithdrawals(
-        withdrawalsResponse.data.data
+        withdrawalsResponse.data.data ?? []
       );
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Failed to load investor details:",
+        error
+      );
     } finally {
       setLoading(false);
     }
@@ -113,7 +89,7 @@ const InvestorDetails = () => {
   const totalProfit =
     profits.reduce(
       (sum, item) =>
-        sum + item.profitAmount,
+        sum + (item.monthlyProfit || 0),
       0
     );
 
@@ -141,7 +117,7 @@ const InvestorDetails = () => {
           investor?.fullName
         }
         totalInvestment={
-          investor?.totalInvestment
+          investor?.totalInvestment ?? 0
         }
       />
 
@@ -160,7 +136,7 @@ const InvestorDetails = () => {
           value={`₹${Number(
             totalProfit
           ).toLocaleString()}`}
-          change={`${profits.length} Distributions`}
+          change={`${profits.length} Profit Records`}
         />
 
         <StatCard
@@ -172,23 +148,13 @@ const InvestorDetails = () => {
         />
       </div>
 
-      <div className="grid md:grid-cols-3 gap-4">
+      <div className="grid md:grid-cols-2 gap-4">
         <GradientButton
           onClick={() =>
             setShowModal(true)
           }
         >
           Add Investment
-        </GradientButton>
-
-        <GradientButton
-          onClick={() =>
-            setShowProfitModal(
-              true
-            )
-          }
-        >
-          Distribute Profit
         </GradientButton>
 
         <GradientButton
@@ -221,18 +187,6 @@ const InvestorDetails = () => {
           investorId={id}
           onClose={() =>
             setShowModal(false)
-          }
-          onSuccess={fetchData}
-        />
-      )}
-
-      {showProfitModal && (
-        <DistributeProfitModal
-          investorId={id}
-          onClose={() =>
-            setShowProfitModal(
-              false
-            )
           }
           onSuccess={fetchData}
         />

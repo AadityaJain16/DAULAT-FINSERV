@@ -14,12 +14,17 @@ const AddInvestmentModal = ({
   const [amount, setAmount] =
     useState("");
 
+  const today = new Date();
+
+  const localDate =
+    `${today.getFullYear()}-${String(
+      today.getMonth() + 1
+    ).padStart(2, "0")}-${String(
+      today.getDate()
+    ).padStart(2, "0")}`;
+
   const [investmentDate, setInvestmentDate] =
-    useState(
-      new Date()
-        .toISOString()
-        .split("T")[0]
-    );
+    useState(localDate);
 
   const [loading, setLoading] =
     useState(false);

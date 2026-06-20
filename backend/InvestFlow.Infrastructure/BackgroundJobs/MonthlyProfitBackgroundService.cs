@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
 namespace InvestFlow.Infrastructure.BackgroundJobs;
 
 public class MonthlyProfitBackgroundService
@@ -12,6 +13,7 @@ public class MonthlyProfitBackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
     private readonly ILogger<MonthlyProfitBackgroundService> _logger;
+
     public MonthlyProfitBackgroundService(
         IServiceScopeFactory scopeFactory,
         ILogger<MonthlyProfitBackgroundService> logger)
@@ -38,8 +40,17 @@ public class MonthlyProfitBackgroundService
                     scope.ServiceProvider
                         .GetRequiredService<IMonthlyProfitService>();
 
+                var indiaTimeZone =
+                    TimeZoneInfo.FindSystemTimeZoneById(
+                        "Asia/Kolkata");
+
+                var now =
+                    TimeZoneInfo.ConvertTimeFromUtc(
+                        DateTime.UtcNow,
+                        indiaTimeZone);
+
                 var targetDate =
-                    DateTime.UtcNow.AddMonths(-1);
+                    now.AddMonths(-1);
 
                 bool alreadyExecuted =
                     await context.SystemJobExecutions
@@ -62,10 +73,10 @@ public class MonthlyProfitBackgroundService
                             JobName = "MonthlyProfit",
                             Month = targetDate.Month,
                             Year = targetDate.Year,
-                            ExecutedAt = DateTime.UtcNow,
+                            ExecutedAt = now,
                             Success = true,
-                            CreatedAt = DateTime.UtcNow,
-                            UpdatedAt = DateTime.UtcNow
+                            CreatedAt = now,
+                            UpdatedAt = now
                         });
 
                     await context.SaveChangesAsync(
@@ -73,11 +84,11 @@ public class MonthlyProfitBackgroundService
                 }
             }
             catch (Exception ex)
-{
-    _logger.LogError(
-        ex,
-        "Annual compounding job failed");
-}
+            {
+                _logger.LogError(
+                    ex,
+                    "Monthly profit job failed");
+            }
 
             await Task.Delay(
                 TimeSpan.FromHours(6),
