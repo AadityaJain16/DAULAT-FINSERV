@@ -2,6 +2,7 @@ using InvestFlow.API.Extensions;
 using InvestFlow.API.Middleware;
 using InvestFlow.Infrastructure.BackgroundJobs;
 using InvestFlow.Infrastructure.Data;
+using InvestFlow.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,6 +47,7 @@ using (var scope = app.Services.CreateScope())
             .GetRequiredService<ApplicationDbContext>();
 
     await dbContext.Database.MigrateAsync();
+    await AdminSeeder.SeedAdminAsync(dbContext);
 }
 
 if (app.Environment.IsDevelopment())
