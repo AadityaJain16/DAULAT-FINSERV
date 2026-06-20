@@ -216,13 +216,5 @@ decimal openingPrincipal =
     }
 }
 
-    Task IMonthlyProfitService.CalculateMonthlyProfitAsync(int month, int year)
-    {
-        throw new NotImplementedException();
-    }
-
-    Task IMonthlyProfitService.RecalculateInvestorProfitAsync(int investorId, int fromMonth, int fromYear)
-    {
-        throw new NotImplementedException();
-    }
+    
 }

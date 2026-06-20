@@ -7,8 +7,5 @@ public interface IMonthlyProfitService
         int year);
 
     Task RecalculateInvestorProfitAsync(
-        int investorId,
-        int fromMonth,
-        int fromYear);
-    Task RecalculateInvestorProfitAsync(int investorId);
+        int investorId);
 }

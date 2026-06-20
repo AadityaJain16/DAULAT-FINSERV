@@ -85,66 +85,24 @@ investor.TotalInvestment +=
         
 
         await _context.SaveChangesAsync();
-        var currentMonth =
-    DateTime.UtcNow.Month;
 
-var currentYear =
-    DateTime.UtcNow.Year;
+var now = DateTime.UtcNow;
 
-if (
-    request.InvestmentDate.Year < currentYear ||
+bool isBackdatedInvestment =
+    request.InvestmentDate.Year < now.Year ||
     (
-        request.InvestmentDate.Year == currentYear &&
-        request.InvestmentDate.Month < currentMonth
-    )
-)
+        request.InvestmentDate.Year == now.Year &&
+        request.InvestmentDate.Month < now.Month
+    );
+
+if (isBackdatedInvestment)
 {
     await _monthlyProfitService
         .RecalculateInvestorProfitAsync(
             request.InvestorId);
 }
-        var now = DateTime.UtcNow;
 
-if (
-    request.InvestmentDate.Year < now.Year ||
-    (
-        request.InvestmentDate.Year == now.Year &&
-        request.InvestmentDate.Month < now.Month
-    )
-)
-{
-    await _monthlyProfitService
-        .RecalculateInvestorProfitAsync(
-            request.InvestorId,
-            request.InvestmentDate.Month,
-            request.InvestmentDate.Year);
-}
-        var investmentMonth =
-    request.InvestmentDate.Month;
-
-var investmentYear =
-    request.InvestmentDate.Year;
-
-var existingRecord =
-    await _context.ProfitRecords
-        .FirstOrDefaultAsync(x =>
-            x.InvestorId == request.InvestorId &&
-            x.Month == investmentMonth &&
-            x.Year == investmentYear);
-
-if (existingRecord != null)
-{
-    _context.ProfitRecords.Remove(
-        existingRecord);
-
-    await _context.SaveChangesAsync();
-
-    await _monthlyProfitService
-        .CalculateMonthlyProfitAsync(
-            investmentMonth,
-            investmentYear);
-}
-       await _activityLogService.LogAsync(
+await _activityLogService.LogAsync(
     "Investment",
     $"{investor.User.FullName} invested ₹{request.Amount:N2}.",
     request.InvestmentDate);
