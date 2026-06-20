@@ -20,8 +20,8 @@ public static class AdminSeeder
         var admin = new User
         {
             FullName = "System Administrator",
-            MobileNumber = "9999999999",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+            MobileNumber = "8058960819",
+            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Nag1n@bhuaa"),
             Role = UserRole.ADMIN,
             IsActive = true,
             CreatedAt = DateTime.UtcNow,
