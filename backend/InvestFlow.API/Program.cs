@@ -40,6 +40,7 @@ builder.Services.AddHostedService<
 var app = builder.Build();
 
 app.UseCors("Frontend");
+
 using (var scope = app.Services.CreateScope())
 {
     var dbContext =
@@ -48,7 +49,9 @@ using (var scope = app.Services.CreateScope())
 
     await dbContext.Database.MigrateAsync();
 
-    await AdminSeeder.SeedAdminAsync(dbContext);
+    await AdminSeeder.SeedAdminAsync(
+        dbContext,
+        builder.Configuration);
 }
 
 if (app.Environment.IsDevelopment())

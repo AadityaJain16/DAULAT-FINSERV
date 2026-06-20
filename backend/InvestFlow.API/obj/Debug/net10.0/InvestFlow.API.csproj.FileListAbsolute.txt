@@ -170,3 +170,4 @@
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.API/obj/Debug/net10.0/InvestFlow.API.pdb
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.API/obj/Debug/net10.0/InvestFlow.API.genruntimeconfig.cache
 /mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.API/obj/Debug/net10.0/ref/InvestFlow.API.dll
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.API/obj/Debug/net10.0/InvestFlow.API.sourcelink.json
