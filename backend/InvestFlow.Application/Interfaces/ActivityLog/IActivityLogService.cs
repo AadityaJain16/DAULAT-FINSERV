@@ -13,4 +13,5 @@ public interface IActivityLogService
 
     Task<IEnumerable<ActivityLogResponseDto>>
         GetAllAsync();
+    Task LogAsync(string v1, string v2, DateTime investmentDate);
 }

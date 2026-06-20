@@ -9,4 +9,5 @@ public class ActivityLog : BaseEntity
 
     public string Description { get; set; }
         = string.Empty;
+        public DateTime ActivityDate { get; set; }
 }

@@ -144,9 +144,10 @@ if (existingRecord != null)
             investmentMonth,
             investmentYear);
 }
-        await _activityLogService.LogAsync(
+       await _activityLogService.LogAsync(
     "Investment",
-    $"{investor.User.FullName} invested ₹{request.Amount:N2}.");
+    $"{investor.User.FullName} invested ₹{request.Amount:N2}.",
+    request.InvestmentDate);
 
         return new InvestmentResponseDto
         {
