@@ -1,0 +1,11 @@
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/bin/Debug/net10.0/InvestFlow.Domain.deps.json
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/bin/Debug/net10.0/InvestFlow.Domain.dll
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/bin/Debug/net10.0/InvestFlow.Domain.pdb
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.AssemblyInfoInputs.cache
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.AssemblyInfo.cs
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.csproj.CoreCompileInputs.cache
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.dll
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/refint/InvestFlow.Domain.dll
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/InvestFlow.Domain.pdb
+/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Domain/obj/Debug/net10.0/ref/InvestFlow.Domain.dll

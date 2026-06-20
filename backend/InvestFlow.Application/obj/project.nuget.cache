@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "VyXAi4L4FZY=",
+  "success": true,
+  "projectFilePath": "/mnt/nvme0n1p5/Projects/InvestFlow/backend/InvestFlow.Application/InvestFlow.Application.csproj",
+  "expectedPackageFiles": [
+    "/home/aaditya/.nuget/packages/fluentvalidation/12.1.1/fluentvalidation.12.1.1.nupkg.sha512"
+  ],
+  "logs": []
+}

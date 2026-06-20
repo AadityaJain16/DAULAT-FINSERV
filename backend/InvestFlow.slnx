@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="InvestFlow.API/InvestFlow.API.csproj" />
+  <Project Path="InvestFlow.Application/InvestFlow.Application.csproj" />
+  <Project Path="InvestFlow.Domain/InvestFlow.Domain.csproj" />
+  <Project Path="InvestFlow.Infrastructure/InvestFlow.Infrastructure.csproj" />
+</Solution>
