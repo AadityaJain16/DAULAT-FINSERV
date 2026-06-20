@@ -49,8 +49,5 @@ public static class AdminSeeder
         await context.SaveChangesAsync();
     }
 
-    public static async Task SeedAdminAsync(ApplicationDbContext dbContext)
-    {
-        throw new NotImplementedException();
-    }
+    
 }
