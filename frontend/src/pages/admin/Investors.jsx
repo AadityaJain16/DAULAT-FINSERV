@@ -39,27 +39,22 @@ const Investors = () => {
       setInvestors(investorData);
 
       setStats({
-        totalInvestors:
-          investorData.length,
+  totalInvestors: investorData.length,
 
-        totalInvested:
-          investorData.reduce(
-            (sum, investor) =>
-              sum +
-              (investor.totalInvestment ||
-                0),
-            0
-          ),
+  totalInvested: investorData.reduce(
+    (sum, investor) =>
+      sum + (investor.totalInvested || 0),
+    0
+  ),
 
-        totalPortfolioValue:
-          investorData.reduce(
-            (sum, investor) =>
-              sum +
-              (investor.totalInvestment ||
-                0),
-            0
-          ),
-      });
+  totalPortfolioValue: investorData.reduce(
+    (sum, investor) =>
+      sum +
+      (investor.totalInvestment || 0) +
+      (investor.accumulatedInterest || 0),
+    0
+  ),
+});
     } catch (error) {
   console.error(
     "Failed to create investor:",

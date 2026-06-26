@@ -37,16 +37,18 @@ public class InvestorService : IInvestorService
                 .Contains(keyword))
         .Select(x =>
             new InvestorResponseDto
-            {
-                InvestorId = x.Id,
-                UserId = x.UserId,
-                FullName =
-                    x.User.FullName,
-                MobileNumber =
-                    x.User.MobileNumber,
-                TotalInvestment =
-                    x.TotalInvestment
-            })
+{
+    InvestorId = x.Id,
+    UserId = x.UserId,
+    FullName = x.User.FullName,
+    MobileNumber = x.User.MobileNumber,
+
+    TotalInvestment = x.TotalInvestment,
+    TotalInvested = x.TotalInvested,
+    AccumulatedInterest = x.AccumulatedInterest,
+    TotalWithdrawn = x.TotalWithdrawn,
+    TotalProfitEarned = x.TotalProfitEarned
+})
         .ToListAsync();
 }
     public async Task<PagedResult<InvestorResponseDto>>
@@ -68,15 +70,18 @@ public class InvestorService : IInvestorService
             .Take(pageSize)
             .Select(x =>
                 new InvestorResponseDto
-                {
-                    InvestorId = x.Id,
-                    UserId = x.UserId,
-                    FullName = x.User.FullName,
-                    MobileNumber =
-                        x.User.MobileNumber,
-                    TotalInvestment =
-                        x.TotalInvestment
-                })
+{
+    InvestorId = x.Id,
+    UserId = x.UserId,
+    FullName = x.User.FullName,
+    MobileNumber = x.User.MobileNumber,
+
+    TotalInvestment = x.TotalInvestment,
+    TotalInvested = x.TotalInvested,
+    AccumulatedInterest = x.AccumulatedInterest,
+    TotalWithdrawn = x.TotalWithdrawn,
+    TotalProfitEarned = x.TotalProfitEarned
+})
             .ToListAsync();
 
     return new PagedResult<InvestorResponseDto>
@@ -148,7 +153,12 @@ return new InvestorResponseDto
     UserId = user.Id,
     FullName = user.FullName,
     MobileNumber = user.MobileNumber,
-    TotalInvestment = investor.TotalInvestment
+
+    TotalInvestment = investor.TotalInvestment,
+    TotalInvested = investor.TotalInvested,
+    AccumulatedInterest = investor.AccumulatedInterest,
+    TotalWithdrawn = investor.TotalWithdrawn,
+    TotalProfitEarned = investor.TotalProfitEarned
 };
     }
     public async Task<IEnumerable<InvestorResponseDto>>
@@ -157,13 +167,18 @@ return new InvestorResponseDto
     return await _context.Investors
         .Include(x => x.User)
         .Select(x => new InvestorResponseDto
-        {
-            InvestorId = x.Id,
-            UserId = x.UserId,
-            FullName = x.User.FullName,
-            MobileNumber = x.User.MobileNumber,
-            TotalInvestment = x.TotalInvestment
-        })
+{
+    InvestorId = x.Id,
+    UserId = x.UserId,
+    FullName = x.User.FullName,
+    MobileNumber = x.User.MobileNumber,
+
+    TotalInvestment = x.TotalInvestment,
+    TotalInvested = x.TotalInvested,
+    AccumulatedInterest = x.AccumulatedInterest,
+    TotalWithdrawn = x.TotalWithdrawn,
+    TotalProfitEarned = x.TotalProfitEarned
+})
         .ToListAsync();
 }
 
@@ -177,14 +192,19 @@ public async Task<InvestorResponseDto?>
     if (investor == null)
         return null;
 
-    return new InvestorResponseDto
-    {
-        InvestorId = investor.Id,
-        UserId = investor.UserId,
-        FullName = investor.User.FullName,
-        MobileNumber = investor.User.MobileNumber,
-        TotalInvestment = investor.TotalInvestment
-    };
+   return new InvestorResponseDto
+{
+    InvestorId = investor.Id,
+    UserId = investor.UserId,
+    FullName = investor.User.FullName,
+    MobileNumber = investor.User.MobileNumber,
+
+    TotalInvestment = investor.TotalInvestment,
+    TotalInvested = investor.TotalInvested,
+    AccumulatedInterest = investor.AccumulatedInterest,
+    TotalWithdrawn = investor.TotalWithdrawn,
+    TotalProfitEarned = investor.TotalProfitEarned
+};
 }
 
 public async Task<InvestorResponseDto>
@@ -207,13 +227,18 @@ public async Task<InvestorResponseDto>
     await _context.SaveChangesAsync();
 
     return new InvestorResponseDto
-    {
-        InvestorId = investor.Id,
-        UserId = investor.UserId,
-        FullName = investor.User.FullName,
-        MobileNumber = investor.User.MobileNumber,
-        TotalInvestment = investor.TotalInvestment
-    };
+{
+    InvestorId = investor.Id,
+    UserId = investor.UserId,
+    FullName = investor.User.FullName,
+    MobileNumber = investor.User.MobileNumber,
+
+    TotalInvestment = investor.TotalInvestment,
+    TotalInvested = investor.TotalInvested,
+    AccumulatedInterest = investor.AccumulatedInterest,
+    TotalWithdrawn = investor.TotalWithdrawn,
+    TotalProfitEarned = investor.TotalProfitEarned
+};
 }
 
 public async Task DeleteAsync(int id)
