@@ -52,11 +52,23 @@ public class MonthlyProfitService
         .FirstOrDefaultAsync();
 
 decimal openingPrincipal =
-    previousRecord?.ClosingPrincipal
-    ?? investor.TotalInvestment;
+    previousRecord != null
+        ? previousRecord.ClosingPrincipal
+        : 0;
 
-            decimal carryForward =
-                investor.PendingInvestmentCarryForward;
+           var previousMonth =
+    new DateTime(year, month, 1)
+        .AddMonths(-1);
+
+decimal carryForward =
+    investor.Investments
+        .Where(x =>
+            x.InvestmentDate.Year ==
+                previousMonth.Year &&
+            x.InvestmentDate.Month ==
+                previousMonth.Month &&
+            x.InvestmentDate.Day > 5)
+        .Sum(x => x.Amount);
 
             decimal investmentsBefore5th =
                 investor.Investments
@@ -82,10 +94,12 @@ decimal openingPrincipal =
                     .Sum(x => x.Amount);
 
             decimal profitBase =
-                openingPrincipal +
-                carryForward +
-                investmentsBefore5th -
-                withdrawals;
+    Math.Max(
+        0,
+        openingPrincipal +
+        carryForward +
+        investmentsBefore5th -
+        withdrawals);
 
             decimal monthlyProfit =
                 RoiCalculator.CalculateMonthlyProfit(
@@ -96,7 +110,8 @@ decimal openingPrincipal =
 
             investor.TotalProfitEarned +=
                 monthlyProfit;
-
+investor.UpdatedAt =
+    DateTime.UtcNow;
             investor.PendingInvestmentCarryForward =
                 lateInvestments;
 

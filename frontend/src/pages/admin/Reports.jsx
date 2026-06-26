@@ -214,9 +214,7 @@ const Reports = () => {
                         text-slate-400
                       "
                     >
-                      {new Date(
-                        activity.createdAt
-                      ).toLocaleString()}
+                     {String(new Date(activity.activityDate))}
                     </span>
                   </div>
 

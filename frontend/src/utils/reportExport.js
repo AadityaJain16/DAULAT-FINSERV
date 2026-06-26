@@ -72,9 +72,13 @@ export const exportReportPdf = (
       (activity) => [
         activity.activityType,
         activity.description,
-        new Date(
-          activity.activityDate
-        ).toLocaleDateString(),
+        activity.activityDate &&
+        activity.activityDate !==
+          "0001-01-01T00:00:00"
+          ? new Date(
+              activity.activityDate
+            ).toLocaleDateString()
+          : "-",
       ]
     ),
   });
