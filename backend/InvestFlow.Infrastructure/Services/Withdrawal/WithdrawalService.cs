@@ -1,33 +1,35 @@
 using InvestFlow.Application.DTOs.Withdrawal;
 using InvestFlow.Application.Interfaces.Withdrawal;
+using InvestFlow.Application.Interfaces.ActivityLog;
+using InvestFlow.Application.Interfaces.ProfitEngine;
 using InvestFlow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using InvestFlow.Application.Interfaces.ActivityLog;
 
 namespace InvestFlow.Infrastructure.Services.Withdrawal;
-
 
 public class WithdrawalService : IWithdrawalService
 {
     private readonly ApplicationDbContext _context;
     private readonly IActivityLogService _activityLogService;
+    private readonly IMonthlyProfitService _monthlyProfitService;
 
     public WithdrawalService(
         ApplicationDbContext context,
-        IActivityLogService activityLogService)
+        IActivityLogService activityLogService,
+        IMonthlyProfitService monthlyProfitService)
     {
         _context = context;
         _activityLogService = activityLogService;
+        _monthlyProfitService = monthlyProfitService;
     }
 
-    public async Task<WithdrawalResponseDto>
-        CreateAsync(
+    public async Task<WithdrawalResponseDto> CreateAsync(
         CreateWithdrawalDto request)
     {
-       var investor = await _context.Investors
-    .Include(x => x.User)
-    .FirstOrDefaultAsync(x =>
-        x.Id == request.InvestorId);
+        var investor = await _context.Investors
+            .Include(x => x.User)
+            .FirstOrDefaultAsync(x =>
+                x.Id == request.InvestorId);
 
         if (investor == null)
             throw new Exception("Investor not found.");
@@ -36,29 +38,25 @@ public class WithdrawalService : IWithdrawalService
             throw new Exception(
                 "Withdrawal amount must be greater than zero.");
 
-        if (request.Amount >
-            investor.TotalInvestment)
-        {
+        if (request.Amount > investor.TotalInvestment)
             throw new Exception(
                 "Insufficient investment balance.");
-        }
 
         var withdrawal =
             new Domain.Entities.Withdrawal
             {
                 InvestorId = investor.Id,
                 Amount = request.Amount,
-                WithdrawalDate = DateTime.UtcNow,
+                WithdrawalDate = request.WithdrawalDate,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
         _context.Withdrawals.Add(withdrawal);
-investor.TotalInvestment -=
-    request.Amount;
 
-investor.TotalWithdrawn +=
-    request.Amount;
+        investor.TotalInvestment -= request.Amount;
+        investor.TotalWithdrawn += request.Amount;
+        investor.UpdatedAt = DateTime.UtcNow;
 
         _context.Notifications.Add(
             new Domain.Entities.Notification
@@ -71,25 +69,35 @@ investor.TotalWithdrawn +=
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             });
-            await _activityLogService.LogAsync(
-    "Withdrawal",
-    $"{investor.User.FullName} withdrew ₹{request.Amount:N2}.");
+
+        await _activityLogService.LogAsync(
+            "Withdrawal",
+            $"{investor.User.FullName} withdrew ₹{request.Amount:N2}.",
+            request.WithdrawalDate);
 
         await _context.SaveChangesAsync();
+
+        // Recalculate profit whenever the withdrawal is
+        // effective today or in the past.
+        if (request.WithdrawalDate.Date <= DateTime.UtcNow.Date)
+        {
+            await _monthlyProfitService
+                .RecalculateInvestorProfitAsync(
+                    investor.Id);
+        }
 
         return new WithdrawalResponseDto
         {
             WithdrawalId = withdrawal.Id,
             InvestorId = withdrawal.InvestorId,
             Amount = withdrawal.Amount,
-            WithdrawalDate =
-                withdrawal.WithdrawalDate
+            WithdrawalDate = withdrawal.WithdrawalDate
         };
     }
 
     public async Task<IEnumerable<WithdrawalResponseDto>>
         GetByInvestorIdAsync(
-        int investorId)
+            int investorId)
     {
         return await _context.Withdrawals
             .Where(x =>
@@ -102,8 +110,7 @@ investor.TotalWithdrawn +=
                     WithdrawalId = x.Id,
                     InvestorId = x.InvestorId,
                     Amount = x.Amount,
-                    WithdrawalDate =
-                        x.WithdrawalDate
+                    WithdrawalDate = x.WithdrawalDate
                 })
             .ToListAsync();
     }

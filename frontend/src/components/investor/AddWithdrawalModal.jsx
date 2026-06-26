@@ -15,24 +15,33 @@ const AddWithdrawalModal = ({
   const [amount, setAmount] =
     useState("");
 
+  const [withdrawalDate, setWithdrawalDate] =
+    useState(
+      new Date()
+        .toISOString()
+        .split("T")[0]
+    );
+
   const [loading, setLoading] =
     useState(false);
 
   const handleSubmit =
     async () => {
-      if (!amount) return;
+      if (!amount || !withdrawalDate)
+        return;
 
       try {
         setLoading(true);
 
-        await withdrawalService
-          .create({
-            investorId:
-              Number(investorId),
+        await withdrawalService.create({
+          investorId:
+            Number(investorId),
 
-            amount:
-              Number(amount),
-          });
+          amount:
+            Number(amount),
+
+          withdrawalDate,
+        });
 
         onSuccess();
 
@@ -60,7 +69,26 @@ const AddWithdrawalModal = ({
           placeholder="Enter Amount"
           value={amount}
           onChange={(e) =>
-            setAmount(
+            setAmount(e.target.value)
+          }
+          className="
+            w-full
+            bg-white/5
+            border
+            border-white/10
+            rounded-xl
+            p-3
+            text-white
+            outline-none
+            mb-4
+          "
+        />
+
+        <input
+          type="date"
+          value={withdrawalDate}
+          onChange={(e) =>
+            setWithdrawalDate(
               e.target.value
             )
           }
@@ -95,9 +123,7 @@ const AddWithdrawalModal = ({
               onClick={
                 handleSubmit
               }
-              disabled={
-                loading
-              }
+              disabled={loading}
             >
               {loading
                 ? "Saving..."

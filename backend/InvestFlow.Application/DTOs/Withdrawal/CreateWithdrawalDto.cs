@@ -5,4 +5,6 @@ public class CreateWithdrawalDto
     public int InvestorId { get; set; }
 
     public decimal Amount { get; set; }
+
+    public DateTime WithdrawalDate { get; set; }
 }
