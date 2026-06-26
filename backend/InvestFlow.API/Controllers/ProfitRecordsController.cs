@@ -4,7 +4,7 @@ using InvestFlow.Application.DTOs.ProfitRecords;
 using InvestFlow.Application.Interfaces.ProfitRecords;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using InvestFlow.Application.Interfaces.ProfitEngine;
 namespace InvestFlow.API.Controllers;
 
 [ApiController]
@@ -12,15 +12,22 @@ namespace InvestFlow.API.Controllers;
 public class ProfitRecordsController
     : ControllerBase
 {
-    private readonly IProfitRecordService
-        _profitRecordService;
+  private readonly IProfitRecordService
+    _profitRecordService;
+
+private readonly IAnnualCompoundingService
+    _annualCompoundingService;
 
     public ProfitRecordsController(
-        IProfitRecordService profitRecordService)
-    {
-        _profitRecordService =
-            profitRecordService;
-    }
+    IProfitRecordService profitRecordService,
+    IAnnualCompoundingService annualCompoundingService)
+{
+    _profitRecordService =
+        profitRecordService;
+
+    _annualCompoundingService =
+        annualCompoundingService;
+}
 
     [Authorize(Roles = "ADMIN")]
     [HttpGet("investor/{investorId}")]
@@ -69,4 +76,18 @@ public class ProfitRecordsController
                 Data = records
             });
     }
+    [Authorize(Roles = "ADMIN")]
+[HttpPost("test-annual-compound")]
+public async Task<IActionResult> TestAnnualCompound()
+{
+    await _annualCompoundingService.CompoundAsync();
+
+    return Ok(
+        new ApiResponse<string>
+        {
+            Success = true,
+            Message = "Annual compounding executed successfully.",
+            Data = "Done"
+        });
+}
 }
