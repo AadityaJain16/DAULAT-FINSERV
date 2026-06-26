@@ -32,11 +32,9 @@ const ActivityTimeline = ({
                 }
               </p>
 
-              <p className="text-xs text-slate-500 mt-2">
-              new Date(
-    activity.activityDate
-).toLocaleDateString()
-              </p>
+             <p className="text-xs text-slate-500 mt-2">
+    {new Date(activity.activityDate).toLocaleDateString()}
+</p>
             </div>
           )
         )}
