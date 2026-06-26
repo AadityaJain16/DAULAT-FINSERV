@@ -188,7 +188,7 @@ const Reports = () => {
                 index
               ) => (
                 <div
-                  key={index}
+                  key={`${activity.activityType}-${activity.activityDate}-${index}`}
                   className="
                     border-b
                     border-white/10

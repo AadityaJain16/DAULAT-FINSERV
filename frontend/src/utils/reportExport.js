@@ -27,15 +27,27 @@ export const exportReportPdf = (
       ],
       [
         "Total Investment",
-        `₹${dashboard.totalInvestment}`,
+        `₹${Number(
+          dashboard.totalInvestment ?? 0
+        ).toLocaleString()}`,
       ],
       [
         "Total Withdrawals",
-        `₹${dashboard.totalWithdrawals}`,
+        `₹${Number(
+          dashboard.totalWithdrawals ?? 0
+        ).toLocaleString()}`,
       ],
       [
-        "Profit Distributed",
-        `₹${dashboard.totalProfitDistributed}`,
+        "Profit Earned",
+        `₹${Number(
+          dashboard.totalProfitEarned ?? 0
+        ).toLocaleString()}`,
+      ],
+      [
+        "Accumulated Interest",
+        `₹${Number(
+          dashboard.totalAccumulatedInterest ?? 0
+        ).toLocaleString()}`,
       ],
       [
         "Notifications",
@@ -61,8 +73,8 @@ export const exportReportPdf = (
         activity.activityType,
         activity.description,
         new Date(
-          activity.createdAt
-        ).toLocaleString(),
+          activity.activityDate
+        ).toLocaleDateString(),
       ]
     ),
   });
