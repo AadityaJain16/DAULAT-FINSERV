@@ -51,6 +51,8 @@ public class ActivityLogService
         string description,
         DateTime activityDate)
     {
+        Console.WriteLine(
+    $"ActivityDate received: {activityDate:yyyy-MM-dd}");
         var log =
             new ActivityLogEntity
             {

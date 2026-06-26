@@ -31,8 +31,8 @@ public class ReportService : IReportService
                     Description =
                         x.Description,
 
-                    CreatedAt =
-                        x.CreatedAt
+                    ActivityDate =
+    x.ActivityDate
                 })
             .ToListAsync();
     }

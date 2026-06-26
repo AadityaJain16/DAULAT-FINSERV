@@ -13,9 +13,7 @@ const ActivityTimeline = ({
         {activities.map(
           (activity) => (
             <div
-              key={
-                activity.createdAt
-              }
+              key={`${activity.activityType}-${activity.activityDate}`}
               className="
                 border-b
                 border-white/10
@@ -35,9 +33,9 @@ const ActivityTimeline = ({
               </p>
 
               <p className="text-xs text-slate-500 mt-2">
-                {new Date(
-                  activity.createdAt
-                ).toLocaleString()}
+              new Date(
+    activity.activityDate
+).toLocaleDateString()
               </p>
             </div>
           )
