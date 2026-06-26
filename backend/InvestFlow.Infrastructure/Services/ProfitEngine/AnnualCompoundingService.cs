@@ -17,8 +17,17 @@ public class AnnualCompoundingService
 
     public async Task CompoundAsync()
     {
+        var indiaTimeZone =
+            TimeZoneInfo.FindSystemTimeZoneById(
+                "Asia/Kolkata");
+
+        var now =
+            TimeZoneInfo.ConvertTimeFromUtc(
+                DateTime.UtcNow,
+                indiaTimeZone);
+
         var currentYear =
-            DateTime.UtcNow.Year;
+            now.Year;
 
         var investors =
             await _context.Investors
@@ -37,6 +46,8 @@ public class AnnualCompoundingService
                 investor.LastCompoundedYear =
                     currentYear;
 
+                investor.UpdatedAt = now;
+
                 continue;
             }
 
@@ -48,8 +59,7 @@ public class AnnualCompoundingService
             investor.LastCompoundedYear =
                 currentYear;
 
-            investor.UpdatedAt =
-                DateTime.UtcNow;
+            investor.UpdatedAt = now;
         }
 
         await _context.SaveChangesAsync();

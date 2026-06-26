@@ -40,19 +40,26 @@ public class AnnualCompoundingBackgroundService
                     scope.ServiceProvider
                         .GetRequiredService<IAnnualCompoundingService>();
 
-                var year =
-                    DateTime.UtcNow.Year;
+                var indiaTimeZone =
+                    TimeZoneInfo.FindSystemTimeZoneById(
+                        "Asia/Kolkata");
+
+                var now =
+                    TimeZoneInfo.ConvertTimeFromUtc(
+                        DateTime.UtcNow,
+                        indiaTimeZone);
 
                 bool alreadyExecuted =
                     await context.SystemJobExecutions
                         .AnyAsync(x =>
                             x.JobName ==
                                 "AnnualCompounding" &&
-                            x.Year == year,
+                            x.Year == now.Year,
                             stoppingToken);
 
+                // Run once every April
                 if (!alreadyExecuted &&
-                    DateTime.UtcNow.Month == 4)
+                    now.Month == 4)
                 {
                     await service.CompoundAsync();
 
@@ -62,32 +69,32 @@ public class AnnualCompoundingBackgroundService
                             JobName =
                                 "AnnualCompounding",
 
-                            Month = 0,
+                            Month = 4,
 
-                            Year = year,
+                            Year = now.Year,
 
-                            ExecutedAt =
-                                DateTime.UtcNow,
+                            ExecutedAt = now,
 
                             Success = true,
 
-                            CreatedAt =
-                                DateTime.UtcNow,
+                            CreatedAt = now,
 
-                            UpdatedAt =
-                                DateTime.UtcNow
+                            UpdatedAt = now
                         });
 
                     await context.SaveChangesAsync(
                         stoppingToken);
+
+                    _logger.LogInformation(
+                        "Annual compounding completed successfully.");
                 }
             }
             catch (Exception ex)
-{
-    _logger.LogError(
-        ex,
-        "Annual compounding job failed");
-}
+            {
+                _logger.LogError(
+                    ex,
+                    "Annual compounding job failed");
+            }
 
             await Task.Delay(
                 TimeSpan.FromHours(24),
