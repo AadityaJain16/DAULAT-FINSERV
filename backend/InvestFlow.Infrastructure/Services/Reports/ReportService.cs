@@ -47,7 +47,7 @@ public class ReportService : IReportService
 
             TotalInvestment =
                 await _context.Investors
-                    .SumAsync(x => x.TotalInvestment),
+                    .SumAsync(x => x.TotalInvested),
 
             TotalWithdrawals =
                 await _context.Withdrawals

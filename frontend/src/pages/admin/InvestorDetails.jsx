@@ -113,39 +113,37 @@ const InvestorDetails = () => {
       </div>
 
       <PortfolioHero
-        investorName={
-          investor?.fullName
-        }
-        totalInvestment={
-          investor?.totalInvestment ?? 0
-        }
-      />
+  investorName={investor?.fullName}
+  totalInvestment={
+    (investor?.totalInvestment ?? 0) +
+    (investor?.accumulatedInterest ?? 0)
+  }
+/>
 
       <div className="grid md:grid-cols-3 gap-4">
-        <StatCard
-          title="Total Invested"
-          value={`₹${Number(
-            investor?.totalInvestment ??
-              0
-          ).toLocaleString()}`}
-          change={`${investments.length} Investments`}
-        />
+       <StatCard
+  title="Total Invested"
+  value={`₹${Number(
+    investor?.totalInvested ?? 0
+  ).toLocaleString()}`}
+  change={`${investments.length} Investments`}
+/>
+
+<StatCard
+  title="Total Profit"
+  value={`₹${Number(
+    investor?.totalProfitEarned ?? 0
+  ).toLocaleString()}`}
+  change={`${profits.length} Profit Records`}
+/>
 
         <StatCard
-          title="Total Profit"
-          value={`₹${Number(
-            totalProfit
-          ).toLocaleString()}`}
-          change={`${profits.length} Profit Records`}
-        />
-
-        <StatCard
-          title="Withdrawals"
-          value={`₹${Number(
-            totalWithdrawals
-          ).toLocaleString()}`}
-          change={`${withdrawals.length} Withdrawals`}
-        />
+  title="Withdrawals"
+  value={`₹${Number(
+    investor?.totalWithdrawn ?? 0
+  ).toLocaleString()}`}
+  change={`${withdrawals.length} Withdrawals`}
+ />
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">

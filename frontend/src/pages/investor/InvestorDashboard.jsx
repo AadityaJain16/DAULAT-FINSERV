@@ -86,14 +86,15 @@ const InvestorDashboard = () => {
         Welcome Back 👋
       </h1>
 
-      <PortfolioHero
-        investorName={
-          dashboard?.fullName
-        }
-        totalInvestment={
-          dashboard?.totalInvestment ?? 0
-        }
-      />
+     <PortfolioHero
+  investorName={
+    dashboard?.fullName
+  }
+  totalInvestment={
+    (dashboard?.totalInvestment ?? 0) +
+    (dashboard?.accumulatedInterest ?? 0)
+  }
+/>
 
       {/* Row 1 */}
 
@@ -104,13 +105,13 @@ const InvestorDashboard = () => {
           gap-4
         "
       >
-        <StatCard
-          title="Invested"
-          value={`₹${Number(
-            dashboard?.totalInvestment ?? 0
-          ).toLocaleString()}`}
-          change={`${dashboard?.totalInvestments ?? 0} Investments`}
-        />
+       <StatCard
+  title="Invested"
+  value={`₹${Number(
+    dashboard?.totalInvested ?? 0
+  ).toLocaleString()}`}
+  change={`${dashboard?.totalInvestments ?? 0} Investments`}
+/>
 
         <StatCard
           title="Accumulated Interest"
